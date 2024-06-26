@@ -1,0 +1,8 @@
+{
+    "ignore": [
+        "node_modules",
+        "dist"
+    ],
+    "watch": ["*.*"],
+    "ext": "html,js,css"
+}
