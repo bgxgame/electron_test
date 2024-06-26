@@ -1,5 +1,11 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('node:path')
+
+function handleSetTitle(event, title) {
+    const webContents = event.sender
+    const win = BrowserWindow.fromWebContents(webContents)
+    win.setTitle(title)
+}
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -10,12 +16,12 @@ const createWindow = () => {
             preload: path.join(__dirname, './backed/preload.js')
         }
     });
-
     win.loadFile('./pages/index.html');
 }
 
 // 只有在 app 模块的 ready 事件被激发后才能创建浏览器窗口
 app.whenReady().then(() => {
+    ipcMain.on('set-title', handleSetTitle)
     createWindow();
     console.log("app start ...");
     // 不能直接在主进程中编辑DOM，因为它无法访问渲染器 文档 上下文 而不是说process对象访问不了

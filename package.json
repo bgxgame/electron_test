@@ -4,7 +4,7 @@
   "description": "this is a electron demo",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon --exec electron .",
+    "start": "electron .",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
