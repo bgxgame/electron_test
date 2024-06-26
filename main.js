@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron')
+const { app, BrowserWindow, dialog, Menu, ipcMain } = require('electron')
 const path = require('node:path')
 
 function handleSetTitle(event, title) {
@@ -14,7 +14,7 @@ async function handleFileOpen() {
         console.log("filePaths", filePaths);
 
         return filePaths[0]
-    }else {
+    } else {
         return ""
     }
 }
@@ -29,6 +29,38 @@ function createWindow() {
             preload: path.join(__dirname, './backed/preload.js')
         }
     });
+
+    // 将 IPC 消息从主进程发送到目标渲染器
+    const menu = Menu.buildFromTemplate([
+        {
+            label: "main2sub",
+            submenu: [
+                {
+                    click: () => win.webContents.send('update-counter', 1),
+                    label: 'Increment'
+                },
+                {
+                    click: () => win.webContents.send('update-counter', -1),
+                    label: 'Decrement'
+                }
+            ]
+        },
+        {
+            label: "main2sub",
+            submenu: [
+                {
+                    click: () => win.webContents.send('update-counter', 1),
+                    label: 'Increment'
+                },
+                {
+                    click: () => win.webContents.send('update-counter', -1),
+                    label: 'Decrement'
+                }
+            ]
+        }
+    ])
+    Menu.setApplicationMenu(menu)
+
     win.loadFile('./pages/index.html');
 }
 
