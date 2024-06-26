@@ -20,4 +20,5 @@ window.electronAPI3.onUpdateCounter((value) => {
   const oldValue = Number(counter.innerText)
   const newValue = oldValue + value
   counter.innerText = newValue.toString()
+  window.electronAPI3.counterValue(newValue)
 })

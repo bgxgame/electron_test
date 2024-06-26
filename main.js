@@ -70,6 +70,11 @@ app.whenReady().then(() => {
     ipcMain.on('set-title', handleSetTitle)
     // IPC 双向
     ipcMain.handle('dialog:openFile', handleFileOpen)
+    // IPC 主进程到渲染进程到 + 回调
+    ipcMain.on('counter-value', (_event, value) => {
+        console.log(value)  
+    })
+
     createWindow();
     console.log("app start ...");
     // 不能直接在主进程中编辑DOM，因为它无法访问渲染器 文档 上下文 而不是说process对象访问不了

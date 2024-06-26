@@ -11,5 +11,6 @@ contextBridge.exposeInMainWorld('electronAPI2', {
 
 // 加载预加载脚本后，渲染器进程应有权访问 window.electronAPI.onUpdateCounter() 监听器函数。
 contextBridge.exposeInMainWorld('electronAPI3', {
-    onUpdateCounter: (callback) => ipcRenderer.on('update-counter', (_event, value) => callback(value))
+    onUpdateCounter: (callback) => ipcRenderer.on('update-counter', (_event, value) => callback(value)),
+    counterValue: (value) => ipcRenderer.send('counter-value', value)
 })
