@@ -4,12 +4,31 @@
   "description": "this is a electron demo",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build" : "electron-builder"
+  },
+  "build": {
+    "appId": "com.yckj.test",
+    "win": {
+      "icon": "./favicon.png",
+      "target": [
+        {
+        "target": "nsis",
+        "arch": ["x64"]
+        }
+      ]
+    }
+  },
+  "nsis": {
+    "oneClick": false, 
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
   },
   "author": "brace",
   "license": "ISC",
   "devDependencies": {
     "electron": "^31.0.2",
+    "electron-builder": "^24.13.3",
     "nodemon": "^3.1.4"
   }
 }
