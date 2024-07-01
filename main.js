@@ -1,10 +1,23 @@
 const { app, BrowserWindow, dialog, Menu, ipcMain } = require('electron')
 const path = require('node:path')
+const fs = require('fs')
 
 function handleSetTitle(event, title) {
     const webContents = event.sender
     const win = BrowserWindow.fromWebContents(webContents)
     win.setTitle(title)
+}
+
+function handleSaveFile(_, text) {
+   console.log("text",text);
+   if(text == "") console.log("请输入内容") 
+   fs.writeFileSync('D:/hello.txt',text)
+}
+
+function readFile() {
+    const res = fs.readFileSync('D:/hello.txt').toString();
+    console.log("######",res);
+    return res;
 }
 
 async function handleFileOpen() {
@@ -26,27 +39,15 @@ function createWindow() {
         height: 600,
         webPreferences: {
             // 将此脚本附加到渲染器流程
-            preload: path.join(__dirname, './backed/preload.js')
+            preload: path.join(__dirname, './backed/preload.js'),
+            defaultFontFamily:"serif"
         }
     });
 
     // 将 IPC 消息从主进程发送到目标渲染器
     const menu = Menu.buildFromTemplate([
         {
-            label: "main2sub",
-            submenu: [
-                {
-                    click: () => win.webContents.send('update-counter', 1),
-                    label: 'Increment'
-                },
-                {
-                    click: () => win.webContents.send('update-counter', -1),
-                    label: 'Decrement'
-                }
-            ]
-        },
-        {
-            label: "main2sub",
+            label: "update-counter",
             submenu: [
                 {
                     click: () => win.webContents.send('update-counter', 1),
@@ -66,8 +67,13 @@ function createWindow() {
 
 // 只有在 app 模块的 ready 事件被激发后才能创建浏览器窗口
 app.whenReady().then(() => {
+    process.env.LANG = 'zh-Hans';
     // IPC 渲染进程到主进程
     ipcMain.on('set-title', handleSetTitle)
+    // 读取D盘中的hello.txt
+    ipcMain.handle('file-read', readFile)
+    // 将用户输入内容写入本机文件
+    ipcMain.on('file-save', handleSaveFile)
     // IPC 双向
     ipcMain.handle('dialog:openFile', handleFileOpen)
     // IPC 主进程到渲染进程到 + 回调

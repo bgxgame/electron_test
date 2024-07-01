@@ -14,3 +14,12 @@ contextBridge.exposeInMainWorld('electronAPI3', {
     onUpdateCounter: (callback) => ipcRenderer.on('update-counter', (_event, value) => callback(value)),
     counterValue: (value) => ipcRenderer.send('counter-value', value)
 })
+
+contextBridge.exposeInMainWorld('electronAPI4', {
+    saveFile: (text) => ipcRenderer.send('file-save', text),
+    async readFile(){
+        let x = await ipcRenderer.invoke("file-read");
+        console.log('$$$',x);
+        return x;
+    }
+})
