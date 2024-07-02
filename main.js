@@ -10,7 +10,7 @@ function handleSetTitle(event, title) {
 
 function handleSaveFile(_, text) {
    console.log("text",text);
-   if(text == "") console.log("ÇëÊäÈëÄÚÈİ") 
+   if(text.length == 0) console.log("1è¯·è¾“å…¥å†…å®¹") 
    fs.writeFileSync('D:/hello.txt',text)
 }
 
@@ -38,17 +38,17 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            // ½«´Ë½Å±¾¸½¼Óµ½äÖÈ¾Æ÷Á÷³Ì
+            // å°†æ­¤è„šæœ¬é™„åŠ åˆ°æ¸²æŸ“å™¨æµç¨‹
             preload: path.join(__dirname, './backed/preload.js'),
-            defaultFontFamily:"serif"
         }
     });
 
-    // ½« IPC ÏûÏ¢´ÓÖ÷½ø³Ì·¢ËÍµ½Ä¿±êäÖÈ¾Æ÷
+    // å°† IPC æ¶ˆæ¯ä»ä¸»è¿›ç¨‹å‘é€åˆ°ç›®æ ‡æ¸²æŸ“å™¨
     const menu = Menu.buildFromTemplate([
         {
             label: "update-counter",
             submenu: [
+                { role: 'toggleDevTools' },
                 {
                     click: () => win.webContents.send('update-counter', 1),
                     label: 'Increment'
@@ -65,37 +65,37 @@ function createWindow() {
     win.loadFile('./pages/index.html');
 }
 
-// Ö»ÓĞÔÚ app Ä£¿éµÄ ready ÊÂ¼ş±»¼¤·¢ºó²ÅÄÜ´´½¨ä¯ÀÀÆ÷´°¿Ú
+// åªæœ‰åœ¨ app æ¨¡å—çš„ ready äº‹ä»¶è¢«æ¿€å‘åæ‰èƒ½åˆ›å»ºæµè§ˆå™¨çª—å£
 app.whenReady().then(() => {
     process.env.LANG = 'zh-Hans';
-    // IPC äÖÈ¾½ø³Ìµ½Ö÷½ø³Ì
+    // IPC æ¸²æŸ“è¿›ç¨‹åˆ°ä¸»è¿›ç¨‹
     ipcMain.on('set-title', handleSetTitle)
-    // ¶ÁÈ¡DÅÌÖĞµÄhello.txt
+    // è¯»å–Dç›˜ä¸­çš„hello.txt
     ipcMain.handle('file-read', readFile)
-    // ½«ÓÃ»§ÊäÈëÄÚÈİĞ´Èë±¾»úÎÄ¼ş
+    // å°†ç”¨æˆ·è¾“å…¥å†…å®¹å†™å…¥æœ¬æœºæ–‡ä»¶
     ipcMain.on('file-save', handleSaveFile)
-    // IPC Ë«Ïò
+    // IPC åŒå‘
     ipcMain.handle('dialog:openFile', handleFileOpen)
-    // IPC Ö÷½ø³Ìµ½äÖÈ¾½ø³Ìµ½ + »Øµ÷
+    // IPC ä¸»è¿›ç¨‹åˆ°æ¸²æŸ“è¿›ç¨‹åˆ° + å›è°ƒ
     ipcMain.on('counter-value', (_event, value) => {
         console.log(value)  
     })
 
     createWindow();
     console.log("app start ...");
-    // ²»ÄÜÖ±½ÓÔÚÖ÷½ø³ÌÖĞ±à¼­DOM£¬ÒòÎªËüÎŞ·¨·ÃÎÊäÖÈ¾Æ÷ ÎÄµµ ÉÏÏÂÎÄ ¶ø²»ÊÇËµprocess¶ÔÏó·ÃÎÊ²»ÁË
+    // ä¸èƒ½ç›´æ¥åœ¨ä¸»è¿›ç¨‹ä¸­ç¼–è¾‘DOMï¼Œå› ä¸ºå®ƒæ— æ³•è®¿é—®æ¸²æŸ“å™¨ æ–‡æ¡£ ä¸Šä¸‹æ–‡ è€Œä¸æ˜¯è¯´processå¯¹è±¡è®¿é—®ä¸äº†
     // for (const dependency of ['chrome', 'node', 'electron']) {
     //     console.log(process.versions[dependency]);
     // }
 
-    // Èç¹ûÃ»ÓĞ´°¿Ú´ò¿ªÔò´ò¿ªÒ»¸ö´°¿Ú (macOS)
+    // å¦‚æœæ²¡æœ‰çª—å£æ‰“å¼€åˆ™æ‰“å¼€ä¸€ä¸ªçª—å£ (macOS)
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     });
 })
 
-// ¹Ø±ÕËùÓĞ´°¿ÚÊ±ÍË³öÓ¦ÓÃ
+// å…³é—­æ‰€æœ‰çª—å£æ—¶é€€å‡ºåº”ç”¨
 app.on('window-all-closed', () => {
-    // Èç¹ûÓÃ»§²»ÊÇÔÚ macOS(darwin) ÉÏÔËĞĞ³ÌĞò£¬Ôòµ÷ÓÃ app.quit()¡£
+    // å¦‚æœç”¨æˆ·ä¸æ˜¯åœ¨ macOS(darwin) ä¸Šè¿è¡Œç¨‹åºï¼Œåˆ™è°ƒç”¨ app.quit()ã€‚
     if (process.platform !== 'darwin') app.quit();
 })

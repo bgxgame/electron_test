@@ -29,7 +29,7 @@ window.electronAPI3.onUpdateCounter((value) => {
     window.electronAPI3.counterValue(newValue)
 })
 
-// ¶ÁÈ¡DÅÌÖÐµÄhello.txt
+// è¯»å–Dç›˜ä¸­çš„hello.txt
 const btn4 = document.getElementById('btn4')
 btn4.addEventListener('click', async () => {
     let data = await window.electronAPI4.readFile()

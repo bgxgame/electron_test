@@ -1,4 +1,4 @@
-// Ô¤¼ÓÔØ½Å±¾ÓëäÖÈ¾Æ÷ Ê¹ÓÃ contextBridge Ä£¿éÀ´°²È«µØÊµÏÖ½»»¥
+// é¢„åŠ è½½è„šæœ¬ä¸Žæ¸²æŸ“å™¨ ä½¿ç”¨ contextBridge æ¨¡å—æ¥å®‰å…¨åœ°å®žçŽ°äº¤äº’
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI2', {
     openFile: () => ipcRenderer.invoke('dialog:openFile')
 })
 
-// ¼ÓÔØÔ¤¼ÓÔØ½Å±¾ºó£¬äÖÈ¾Æ÷½ø³ÌÓ¦ÓÐÈ¨·ÃÎÊ window.electronAPI.onUpdateCounter() ¼àÌýÆ÷º¯Êý¡£
+// åŠ è½½é¢„åŠ è½½è„šæœ¬åŽï¼Œæ¸²æŸ“å™¨è¿›ç¨‹åº”æœ‰æƒè®¿é—® window.electronAPI.onUpdateCounter() ç›‘å¬å™¨å‡½æ•°ã€‚
 contextBridge.exposeInMainWorld('electronAPI3', {
     onUpdateCounter: (callback) => ipcRenderer.on('update-counter', (_event, value) => callback(value)),
     counterValue: (value) => ipcRenderer.send('counter-value', value)
